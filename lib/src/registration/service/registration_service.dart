@@ -1,8 +1,8 @@
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
+import 'package:idtp/src/registration/model/registration_response.dart';
 import 'package:idtp/src/registration/model/user_existance_check_response.dart';
-import 'package:idtp/src/registration/model/user_registration_response.dart';
-import 'package:idtp/src/registration/model/user_validation_response.dart';
+import 'package:idtp/src/registration/model/validate_idtp_user_response.dart';
 
 import 'registration_repository.dart';
 
@@ -16,30 +16,32 @@ class RegistrationService implements AlbumsRepository {
   Future<UserExistenceCheckResponse> idtpUserExistenceCheck() async {
     Uri uri = Uri.https(_baseUrl, _userExistenceCheckUrl);
 
-    Response response = await http.get(uri);
-    UserExistenceCheckResponse existenceCheckResponse = response.body as UserExistenceCheckResponse;
+    Response response = await http.post(uri);
+    UserExistenceCheckResponse existenceCheckResponse =
+        response.body as UserExistenceCheckResponse;
 
     return existenceCheckResponse;
   }
 
   @override
-  Future<UserValidationResponse> validateIdtpUser() async {
+  Future<ValidateIdtpUserResponse> validateIdtpUser() async {
     Uri uri = Uri.https(_baseUrl, _userValidationUrl);
 
-    Response response = await http.get(uri);
-    UserValidationResponse userValidationResponse = response.body as UserValidationResponse;
+    Response response = await http.post(uri);
+    ValidateIdtpUserResponse validateIDTPUserRequest =
+        response.body as ValidateIdtpUserResponse;
 
-    return userValidationResponse;
+    return validateIDTPUserRequest;
   }
 
   @override
-  Future<UserRegistrationResponse> registerIdtpUser() async {
+  Future<RegistrationResponse> registerIdtpUser() async {
     Uri uri = Uri.https(_baseUrl, _userRegistrationUrl);
 
-    Response response = await http.get(uri);
-    UserRegistrationResponse userRegistrationResponse = response.body as UserRegistrationResponse;
+    Response response = await http.post(uri);
+    RegistrationResponse registrationResponse =
+        response.body as RegistrationResponse;
 
-    return userRegistrationResponse;
+    return registrationResponse;
   }
-
 }

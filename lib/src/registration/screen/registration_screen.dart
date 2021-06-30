@@ -116,9 +116,9 @@ class RegistrationScreen extends StatelessWidget {
             child: new MaterialButton(
               onPressed: () {
                 if (formKey.currentState.validate()) {
-                  print("Email: " + requestedVIDController.text);
-                  print("Password 1: " + idtpPinController.text);
-                  print("Password 2: " + confirmIdtpPinController.text);
+                  print("Requested VID: " + requestedVIDController.text);
+                  print("IDTP Pin: " + idtpPinController.text);
+                  print("IDTP Pin 2: " + confirmIdtpPinController.text);
 
                   BlocProvider.of<RegistrationBloc>(context)
                       .add(UserSignUpEvent());
