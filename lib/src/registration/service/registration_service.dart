@@ -1,6 +1,5 @@
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
-import 'package:idtp/src/registration/model/album.dart';
 import 'package:idtp/src/registration/model/user_existance_check_response.dart';
 import 'package:idtp/src/registration/model/user_registration_response.dart';
 import 'package:idtp/src/registration/model/user_validation_response.dart';
