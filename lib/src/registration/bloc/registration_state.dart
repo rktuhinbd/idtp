@@ -2,19 +2,19 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
 
 @immutable
-abstract class SignUpState extends Equatable {
+abstract class RegistrationState extends Equatable {
   @override
   List<Object> get props => [];
 }
 
-class InitSignUpState extends SignUpState {}
+class InitRegistrationState extends RegistrationState {}
 
-class LoadingSignUpState extends SignUpState {}
+class LoadingRegistrationState extends RegistrationState {}
 
-class SignUpFailureState extends SignUpState {
+class RegistrationFailureState extends RegistrationState {
   final String error;
 
-  SignUpFailureState({@required this.error});
+  RegistrationFailureState({@required this.error});
 
   @override
   List<Object> get props => [error];

@@ -1,30 +1,30 @@
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 
-abstract class SignUpEvent extends Equatable {
-  const SignUpEvent();
+abstract class RegistrationEvent extends Equatable {
+  const RegistrationEvent();
 }
 
-class LoadingSignUpEvent extends SignUpEvent{
+class LoadingRegistrationEvent extends RegistrationEvent{
   final bool token;
 
-  const LoadingSignUpEvent({@required this.token});
+  const LoadingRegistrationEvent({@required this.token});
 
   @override
   List<Object> get props => [token];
 }
 
-class UserSignUpEvent extends SignUpEvent{
-  const UserSignUpEvent();
+class UserRegistrationEvent extends RegistrationEvent{
+  const UserRegistrationEvent();
 
   @override
   List<Object> get props => [];
 }
 
-class SignUpSuccessEvent extends SignUpEvent{
+class RegistrationSuccessEvent extends RegistrationEvent{
   final bool account;
 
-  const SignUpSuccessEvent({@required this.account});
+  const RegistrationSuccessEvent({@required this.account});
 
   @override
   List<Object> get props => [account];
