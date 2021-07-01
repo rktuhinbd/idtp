@@ -6,24 +6,29 @@ import 'package:idtp/src/registration/model/validate_idtp_user_response.dart';
 
 import 'registration_repository.dart';
 
-class RegistrationService implements AlbumsRepository {
+class RegistrationService implements IDTPRegistrationRepository {
+
   static const _baseUrl = 'http://103.43.55.23:31001/';
   static const String _userExistenceCheckUrl = 'api/user/{mobile}';
   static const String _userValidationUrl = 'management/ValidateIDTPUser';
   static const String _userRegistrationUrl = 'management/RegisterIDTPUser';
 
-  @override
-  Future<UserExistenceCheckResponse> idtpUserExistenceCheck() async {
-    Uri uri = Uri.https(_baseUrl, _userExistenceCheckUrl);
 
-    Response response = await http.post(uri);
-    UserExistenceCheckResponse existenceCheckResponse =
-        response.body as UserExistenceCheckResponse;
+  Future<UserExistenceCheckResponse> idtpUserExistenceCheck(mobile) async {
+    Uri uri = Uri.https(_baseUrl, _userExistenceCheckUrl + "mobile=$mobile");
 
-    return existenceCheckResponse;
+    try{
+      Response response = await http.post(uri);
+      if(response.statusCode == 200 || response.statusCode == 201){
+        return userExistenceCheckResponseFromJson(response.body);
+      }
+    } catch (e){
+      print(e);
+    }
+    return null;
   }
 
-  @override
+
   Future<ValidateIdtpUserResponse> validateIdtpUser() async {
     Uri uri = Uri.https(_baseUrl, _userValidationUrl);
 
@@ -34,7 +39,7 @@ class RegistrationService implements AlbumsRepository {
     return validateIDTPUserRequest;
   }
 
-  @override
+
   Future<RegistrationResponse> registerIdtpUser() async {
     Uri uri = Uri.https(_baseUrl, _userRegistrationUrl);
 

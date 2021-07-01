@@ -9,7 +9,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
 
   @override
   Stream<HomeState> mapEventToState(HomeEvent event) async* {
-    if (event is LoadingRegistrationState) {
+    if (event is UserExistenceCheckState) {
       yield LoadingHomeState();
       try {
 

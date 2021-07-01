@@ -9,7 +9,7 @@ abstract class RegistrationState extends Equatable {
 
 class InitRegistrationState extends RegistrationState {}
 
-class LoadingRegistrationState extends RegistrationState {}
+class UserExistenceCheckState extends RegistrationState {}
 
 class RegistrationFailureState extends RegistrationState {
   final String error;

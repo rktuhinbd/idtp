@@ -30,10 +30,15 @@ class RegistrationBuilderScreen extends StatelessWidget {
             child: Container(
               child: BlocBuilder<RegistrationBloc, RegistrationState>(
                   builder: (BuildContext context, RegistrationState state) {
-                    if (state is LoadingRegistrationState) {
+
+                    if (state is InitRegistrationState) {
                       return sign_up_widget(context);
                     }
-                    return sign_up_widget(context);
+
+                    if (state is UserExistenceCheckState) {
+
+                    }
+                    return null;
                   }),
             ),
           ),
