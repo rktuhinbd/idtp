@@ -1,7 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:idtp/src/registration/bloc/registration_state.dart';
-import 'package:idtp/src/registration/service/registration_repository.dart';
 import 'package:idtp/src/registration/service/registration_service.dart';
+
 import 'registration_event.dart';
 
 class RegistrationBloc extends Bloc<RegistrationEvent, RegistrationState> {
@@ -9,7 +9,6 @@ class RegistrationBloc extends Bloc<RegistrationEvent, RegistrationState> {
 
   @override
   Stream<RegistrationState> mapEventToState(RegistrationEvent event) async* {
-
     if (event is InitRegistrationEvent) {
       yield UserExistenceCheckState();
       try {} catch (e) {}
@@ -18,9 +17,9 @@ class RegistrationBloc extends Bloc<RegistrationEvent, RegistrationState> {
     if (event is UserExistenceCheckerEvent) {
       yield UserExistenceCheckState();
       try {
-        try {
-          var data = await RegistrationService().idtpUserExistenceCheck(event.mobile);
-        } catch (e) {}
+        var data =
+            await RegistrationService().idtpUserExistenceCheck(event.mobile);
+        print(data);
       } catch (e) {}
     }
   }
