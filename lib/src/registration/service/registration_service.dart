@@ -1,16 +1,16 @@
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
 import 'package:idtp/src/registration/model/registration_response.dart';
-import 'package:idtp/src/registration/model/user_existance_check_response.dart';
+import 'package:idtp/src/registration/model/user_existence_check_response.dart';
 import 'package:idtp/src/registration/model/validate_idtp_user_response.dart';
 
 import 'registration_repository.dart';
 
 class RegistrationService implements AlbumsRepository {
-  static const _baseUrl = 'jsonplaceholder.typicode.com';
-  static const String _userExistenceCheckUrl = '/check-existence';
-  static const String _userValidationUrl = '/validate';
-  static const String _userRegistrationUrl = '/register';
+  static const _baseUrl = 'http://103.43.55.23:31001/';
+  static const String _userExistenceCheckUrl = 'api/user/{mobile}';
+  static const String _userValidationUrl = 'management/ValidateIDTPUser';
+  static const String _userRegistrationUrl = 'management/RegisterIDTPUser';
 
   @override
   Future<UserExistenceCheckResponse> idtpUserExistenceCheck() async {
