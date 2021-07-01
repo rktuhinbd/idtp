@@ -13,6 +13,7 @@ class RegistrationBuilderScreen extends StatelessWidget {
   TextEditingController idtpPinController = TextEditingController();
   TextEditingController confirmIdtpPinController = TextEditingController();
 
+  String mobile = "01841752600";
   String requestedVID;
   String idtpPin;
   String confirmIdtpPin;
@@ -34,11 +35,7 @@ class RegistrationBuilderScreen extends StatelessWidget {
                     if (state is InitRegistrationState) {
                       return sign_up_widget(context);
                     }
-
-                    if (state is UserExistenceCheckState) {
-
-                    }
-                    return null;
+                    return sign_up_widget(context);
                   }),
             ),
           ),
@@ -123,7 +120,7 @@ class RegistrationBuilderScreen extends StatelessWidget {
                       print("IDTP Pin 2: " + confirmIdtpPinController.text);
 
                       BlocProvider.of<RegistrationBloc>(context)
-                          .add(UserRegistrationEvent());
+                          .add(UserExistenceCheckerEvent(mobile: mobile));
 
                       showToast("Validation Completed.");
                     } else {

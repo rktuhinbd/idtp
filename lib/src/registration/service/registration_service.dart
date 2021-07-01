@@ -20,6 +20,7 @@ class RegistrationService implements IDTPRegistrationRepository {
     try{
       Response response = await http.post(uri);
       if(response.statusCode == 200 || response.statusCode == 201){
+        print(response.body);
         return userExistenceCheckResponseFromJson(response.body);
       }
     } catch (e){

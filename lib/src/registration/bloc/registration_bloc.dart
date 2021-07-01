@@ -9,6 +9,7 @@ class RegistrationBloc extends Bloc<RegistrationEvent, RegistrationState> {
 
   @override
   Stream<RegistrationState> mapEventToState(RegistrationEvent event) async* {
+
     if (event is InitRegistrationEvent) {
       yield UserExistenceCheckState();
       try {} catch (e) {}
@@ -18,8 +19,7 @@ class RegistrationBloc extends Bloc<RegistrationEvent, RegistrationState> {
       yield UserExistenceCheckState();
       try {
         try {
-          var data =
-              await RegistrationService().idtpUserExistenceCheck(event.mobile);
+          var data = await RegistrationService().idtpUserExistenceCheck(event.mobile);
         } catch (e) {}
       } catch (e) {}
     }

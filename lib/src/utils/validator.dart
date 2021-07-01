@@ -74,8 +74,8 @@ String validateIdtpPin(String value, String idtp, bool confirmIdtp) {
 
   if (value.isEmpty) {
     return "IDTP pin can't be empty";
-  } else if (value.length < 6) {
-    return "IDTP pin length should be at least 6";
+  } else if (value.length < 4) {
+    return "IDTP pin length should be at least 4";
   } else if (!regExp.hasMatch(value)) {
     return "Please enter only numbers as input";
   } else if (confirmIdtp && value != idtp) {
