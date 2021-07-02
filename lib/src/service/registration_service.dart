@@ -40,11 +40,11 @@ class RegistrationService implements IDTPRegistrationRepository {
       Response response = await http.post(
         uri,
         headers: headers,
-        body: validateIdtpUserRequest,
+        body: validateIdtpUserRequestToJson(validateIdtpUserRequest),
         encoding: encoding,
       );
       if (response.statusCode == 200 || response.statusCode == 201) {
-        print(response.body);
+        print("Response: " + response.body);
         return validateIdtpUserResponseFromJson(response.body);
       }
     } catch (e) {

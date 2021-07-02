@@ -12,12 +12,23 @@ class RegistrationBloc extends Bloc<RegistrationEvent, RegistrationState> {
     if (event is InitRegistrationEvent) {
       yield LoadingRegistrationState();
       try {
-        // var data = await RegistrationService()
-            // .validateIdtpUser(event.validateIdtpUserRequest);
-        // print(data);
+
       } catch (e) {
         print(e);
       }
     }
+
+    if(event is UserValidationEvent){
+      yield LoadingRegistrationState();
+
+      try{
+        var response = await RegistrationService().validateIdtpUser(event.validateIdtpUserRequest);
+        print(response);
+      } catch(e){
+
+      }
+    }
+
   }
+
 }

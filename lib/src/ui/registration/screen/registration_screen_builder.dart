@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:idtp/src/model/validate_idtp_user_request.dart';
+import 'package:idtp/src/ui/registration/bloc/registration_bloc.dart';
+import 'package:idtp/src/ui/registration/bloc/registration_event.dart';
 import 'package:idtp/src/utils/validator.dart';
 
 class RegistrationBuilderScreen extends StatelessWidget {
@@ -101,7 +105,19 @@ class RegistrationBuilderScreen extends StatelessWidget {
                 if (formKey.currentState.validate()) {
                   print("Requested VID: " + requestedVIDController.text);
                   print("IDTP Pin: " + idtpPinController.text);
-                  print("IDTP Pin 2: " + confirmIdtpPinController.text);
+
+                  ValidateIdtpUserRequest validateIdtpUserRequest = new ValidateIdtpUserRequest();
+
+                  validateIdtpUserRequest.channelId = "Mobile";
+                  validateIdtpUserRequest.userVid = requestedVIDController.text;
+                  validateIdtpUserRequest.deviceInf = DeviceInf(mobileNo: "01841752600");
+
+                  List<CredDatum> credData = [CredDatum(data: idtpPinController.text, type: "IDTP_PIN")];
+
+                  validateIdtpUserRequest.credData = credData;
+
+                  BlocProvider.of<RegistrationBloc>(context)
+                      .add(UserValidationEvent(validateIdtpUserRequest: validateIdtpUserRequest));
 
                   // showToast("Validation Completed.");
                 } else {
