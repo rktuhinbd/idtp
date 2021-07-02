@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:idtp/src/home/bloc/home_bloc.dart';
-import 'package:idtp/src/home/screen/home_screen.dart';
+import 'package:idtp/src/ui/home/bloc/home_bloc.dart';
+import 'package:idtp/src/ui/home/screen/home_screen.dart';
 
 void main() {
   runApp(MyApp());

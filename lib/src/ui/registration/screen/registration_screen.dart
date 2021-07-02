@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:idtp/src/registration/bloc/registration_bloc.dart';
-import 'package:idtp/src/registration/screen/registration_screen_builder.dart';
+import 'package:idtp/src/ui/registration/bloc/registration_bloc.dart';
+import 'package:idtp/src/ui/registration/screen/registration_screen_builder.dart';
 
 class RegistrationScreen extends StatelessWidget {
   @override

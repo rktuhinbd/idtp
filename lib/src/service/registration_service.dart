@@ -1,8 +1,11 @@
+import 'dart:convert';
+
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
-import 'package:idtp/src/registration/model/registration_response.dart';
-import 'package:idtp/src/registration/model/user_existence_check_response.dart';
-import 'package:idtp/src/registration/model/validate_idtp_user_response.dart';
+import 'package:idtp/src/model/registration_response.dart';
+import 'package:idtp/src/model/user_existence_check_response.dart';
+import 'package:idtp/src/model/validate_idtp_user_request.dart';
+import 'package:idtp/src/model/validate_idtp_user_response.dart';
 
 import 'registration_repository.dart';
 
@@ -27,14 +30,27 @@ class RegistrationService implements IDTPRegistrationRepository {
     return null;
   }
 
-  Future<ValidateIdtpUserResponse> validateIdtpUser() async {
-    Uri uri = Uri.https(_baseUrl, _userValidationUrl);
+  Future<ValidateIdtpUserResponse> validateIdtpUser(
+      validateIdtpUserRequest) async {
+    final uri = Uri.parse(_baseUrl + _userValidationUrl);
+    final headers = {'Content-Type': 'application/json'};
+    final encoding = Encoding.getByName('utf-8');
 
-    Response response = await http.post(uri);
-    ValidateIdtpUserResponse validateIDTPUserRequest =
-        response.body as ValidateIdtpUserResponse;
-
-    return validateIDTPUserRequest;
+    try {
+      Response response = await http.post(
+        uri,
+        headers: headers,
+        body: validateIdtpUserRequest,
+        encoding: encoding,
+      );
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        print(response.body);
+        return validateIdtpUserResponseFromJson(response.body);
+      }
+    } catch (e) {
+      print(e);
+    }
+    return null;
   }
 
   Future<RegistrationResponse> registerIdtpUser() async {

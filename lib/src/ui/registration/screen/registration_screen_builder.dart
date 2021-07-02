@@ -1,7 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:idtp/src/registration/bloc/registration_bloc.dart';
-import 'package:idtp/src/registration/bloc/registration_event.dart';
 import 'package:idtp/src/utils/validator.dart';
 
 class RegistrationBuilderScreen extends StatelessWidget {
@@ -11,7 +8,6 @@ class RegistrationBuilderScreen extends StatelessWidget {
   TextEditingController idtpPinController = TextEditingController();
   TextEditingController confirmIdtpPinController = TextEditingController();
 
-  String mobile = "01841752600";
   String requestedVID;
   String idtpPin;
   String confirmIdtpPin;
@@ -106,9 +102,6 @@ class RegistrationBuilderScreen extends StatelessWidget {
                   print("Requested VID: " + requestedVIDController.text);
                   print("IDTP Pin: " + idtpPinController.text);
                   print("IDTP Pin 2: " + confirmIdtpPinController.text);
-
-                  BlocProvider.of<RegistrationBloc>(context)
-                      .add(UserExistenceCheckerEvent(mobile: mobile));
 
                   // showToast("Validation Completed.");
                 } else {

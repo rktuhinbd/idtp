@@ -14,6 +14,20 @@ class LoadingHomeEvent extends HomeEvent{
   List<Object> get props => [token];
 }
 
+class UserExistenceCheckEvent extends HomeEvent{
+  final String mobile;
+
+  const UserExistenceCheckEvent({@required this.mobile});
+
+  @override
+  List<Object> get props => [mobile];
+
+  @override
+  String toString() {
+    return 'UserExistenceCheckerEvent{mobile: $mobile}';
+  }
+}
+
 class LoadedHomeEvent extends HomeEvent{
   const LoadedHomeEvent();
 
