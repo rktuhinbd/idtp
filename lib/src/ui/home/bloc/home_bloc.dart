@@ -9,19 +9,20 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
 
   @override
   Stream<HomeState> mapEventToState(HomeEvent event) async* {
-
     if (event is UserExistenceCheckEvent) {
       yield LoadingHomeState();
       try {
-        var data =
+        var response =
             await RegistrationService().idtpUserExistenceCheck(event.mobile);
-        print(data);
-        if (data.requestedVirtualId == null) {
+        print(response);
+        if (response.requestedVirtualId == null) {
           yield IsRegistrationPossibleState(isRegistrationPossible: true);
         } else {
           yield IsRegistrationPossibleState(isRegistrationPossible: false);
         }
-      } catch (e) {}
+      } catch (e) {
+        print(e);
+      }
     }
   }
 }

@@ -1,5 +1,13 @@
+import 'dart:convert';
+
+RegistrationRequest registerUserRequestFromJson(String str) =>
+    RegistrationRequest.fromJson(json.decode(str));
+
+String registerUserRequestToJson(RegistrationRequest data) =>
+    json.encode(data.toJson());
+
 class RegistrationRequest {
-  String channelID;
+  String channelID = "Mobile";
   String entityType;
   List<UserReqs> userReqs;
 

@@ -2,10 +2,12 @@ import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
+import 'package:idtp/src/model/registration_request.dart';
 import 'package:idtp/src/model/registration_response.dart';
 import 'package:idtp/src/model/user_existence_check_response.dart';
 import 'package:idtp/src/model/validate_idtp_user_request.dart';
 import 'package:idtp/src/model/validate_idtp_user_response.dart';
+import 'package:idtp/src/utils/toast.dart';
 
 import 'registration_repository.dart';
 
@@ -53,13 +55,30 @@ class RegistrationService implements IDTPRegistrationRepository {
     return null;
   }
 
-  Future<RegistrationResponse> registerIdtpUser() async {
-    Uri uri = Uri.https(_baseUrl, _userRegistrationUrl);
+  Future<RegistrationResponse> registerIdtpUser(registrationRequest) async {
+    final uri = Uri.parse(_baseUrl + _userRegistrationUrl);
+    final headers = {'Content-Type': 'application/json'};
+    final encoding = Encoding.getByName('utf-8');
 
-    Response response = await http.post(uri);
-    RegistrationResponse registrationResponse =
-        response.body as RegistrationResponse;
+    try {
+      Response response = await http.post(
+        uri,
+        headers: headers,
+        body: registerUserRequestToJson(registrationRequest),
+        encoding: encoding,
+      );
 
-    return registrationResponse;
+      showToast("Registration Unsuccessful");
+
+      print("Registration Response: " + response.body);
+
+      // if (response.statusCode == 200 || response.statusCode == 201) {
+      //   print("Registration Response: " + response.body);
+      //   return registerIdtpUser(response.body);
+      // }
+    } catch (e) {
+      print(e);
+    }
+    return null;
   }
 }
