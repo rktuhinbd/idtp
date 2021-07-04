@@ -13,11 +13,4 @@ class LoadingRegistrationState extends RegistrationState {}
 
 class UserValidationState extends RegistrationState {}
 
-class IsValidState extends RegistrationState {
-  bool isAccountExists;
-
-  IsValidState({@required isAccountExists});
-
-  @override
-  List<Object> get props => [isAccountExists];
-}
+class UserRegistrationState extends RegistrationState {}

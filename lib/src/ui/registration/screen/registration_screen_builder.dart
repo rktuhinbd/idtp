@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:idtp/src/model/registration_request.dart';
 import 'package:idtp/src/model/validate_idtp_user_request.dart';
 import 'package:idtp/src/ui/registration/bloc/registration_bloc.dart';
 import 'package:idtp/src/ui/registration/bloc/registration_event.dart';
+import 'package:idtp/src/ui/registration/bloc/registration_state.dart';
+import 'package:idtp/src/utils/toast.dart';
 import 'package:idtp/src/utils/validator.dart';
 
 class RegistrationBuilderScreen extends StatelessWidget {
@@ -12,22 +15,38 @@ class RegistrationBuilderScreen extends StatelessWidget {
   TextEditingController idtpPinController = TextEditingController();
   TextEditingController confirmIdtpPinController = TextEditingController();
 
+  RegistrationRequest registrationRequest = new RegistrationRequest();
   String requestedVID;
   String idtpPin;
   String confirmIdtpPin;
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        resizeToAvoidBottomPadding: false,
-        backgroundColor: Colors.white,
-        body: Padding(
-          padding: const EdgeInsets.fromLTRB(16.0, 24.0, 16.0, 0),
-          child: Form(
-              key: formKey,
-              autovalidateMode: AutovalidateMode.onUserInteraction,
-              child: sign_up_widget(context)),
-        ));
+    return BlocListener<RegistrationBloc, RegistrationState>(
+        listener: (context, state) {
+          if (state is UserRegistrationState) {
+            if (registrationRequest != null) {
+              print("Registration api calling . . .");
+
+              ///=== Registration api call === ///
+              BlocProvider.of<RegistrationBloc>(context).add(
+                  UserRegistrationEvent(
+                      registrationRequest: registrationRequest));
+            } else {
+              showToast("Registration data missing");
+            }
+          }
+        },
+        child: Scaffold(
+            resizeToAvoidBottomPadding: false,
+            backgroundColor: Colors.white,
+            body: Padding(
+              padding: const EdgeInsets.fromLTRB(16.0, 24.0, 16.0, 0),
+              child: Form(
+                  key: formKey,
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
+                  child: sign_up_widget(context)),
+            )));
   }
 
   // ignore: non_constant_identifier_names
@@ -106,18 +125,42 @@ class RegistrationBuilderScreen extends StatelessWidget {
                   print("Requested VID: " + requestedVIDController.text);
                   print("IDTP Pin: " + idtpPinController.text);
 
-                  ValidateIdtpUserRequest validateIdtpUserRequest = new ValidateIdtpUserRequest();
+                  ///=== Validation data setting === ///
+                  ValidateIdtpUserRequest validateIdtpUserRequest =
+                      new ValidateIdtpUserRequest();
 
                   validateIdtpUserRequest.channelId = "Mobile";
                   validateIdtpUserRequest.userVid = requestedVIDController.text;
-                  validateIdtpUserRequest.deviceInf = DeviceInf(mobileNo: "01841752600");
+                  validateIdtpUserRequest.deviceInf =
+                      DeviceInf1(mobileNo: "01841752600");
 
-                  List<CredDatum> credData = [CredDatum(data: idtpPinController.text, type: "IDTP_PIN")];
+                  List<CredDatum> credData = [
+                    CredDatum(data: idtpPinController.text, type: "IDTP_PIN")
+                  ];
 
                   validateIdtpUserRequest.credData = credData;
 
-                  BlocProvider.of<RegistrationBloc>(context)
-                      .add(UserValidationEvent(validateIdtpUserRequest: validateIdtpUserRequest));
+                  ///=== Registration data setting === ///
+                  List<CredData> credData2 = [
+                    CredData(data: idtpPinController.text, type: "IDTP_PIN")
+                  ];
+
+                  registrationRequest.channelID = "Mobile";
+                  registrationRequest.entityType = "Individual";
+                  List<UserReqs> userReqs = [
+                    UserReqs(
+                        credData: credData2,
+                        accountNumber: "0021130141392",
+                        requestedVirtualID: requestedVIDController.text,
+                        password: "12345678",
+                        deviceInf: DeviceInf(mobileNo: "01841752600"))
+                  ];
+                  registrationRequest.userReqs = userReqs;
+
+                  ///=== Validation api call === ///
+                  BlocProvider.of<RegistrationBloc>(context).add(
+                      UserValidationEvent(
+                          validateIdtpUserRequest: validateIdtpUserRequest));
 
                   // showToast("Validation Completed.");
                 } else {

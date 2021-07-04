@@ -7,5 +7,5 @@ abstract class IDTPRegistrationRepository {
 
   Future<ValidateIdtpUserResponse> validateIdtpUser(validateIdtpUserRequest);
 
-  Future<RegistrationResponse> registerIdtpUser();
+  Future<RegistrationResponse> registerIdtpUser(registrationRequest);
 }

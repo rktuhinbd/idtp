@@ -14,9 +14,9 @@ class ValidateIdtpUserRequest {
     this.userVid,
   });
 
-  String channelId;
+  String channelId = "Mobile";
   List<CredDatum> credData;
-  DeviceInf deviceInf;
+  DeviceInf1 deviceInf;
   String userVid;
 
   factory ValidateIdtpUserRequest.fromJson(Map<String, dynamic> json) =>
@@ -24,7 +24,7 @@ class ValidateIdtpUserRequest {
         channelId: json["channelID"],
         credData: List<CredDatum>.from(
             json["credData"].map((x) => CredDatum.fromJson(x))),
-        deviceInf: DeviceInf.fromJson(json["deviceInf"]),
+        deviceInf: DeviceInf1.fromJson(json["deviceInf"]),
         userVid: json["userVid"],
       );
 
@@ -60,8 +60,8 @@ class CredDatum {
       };
 }
 
-class DeviceInf {
-  DeviceInf({
+class DeviceInf1 {
+  DeviceInf1({
     this.deviceId,
     this.ip,
     this.location,
@@ -73,7 +73,7 @@ class DeviceInf {
   String location;
   String mobileNo;
 
-  factory DeviceInf.fromJson(Map<String, dynamic> json) => DeviceInf(
+  factory DeviceInf1.fromJson(Map<String, dynamic> json) => DeviceInf1(
         deviceId: json["deviceID"],
         ip: json["ip"],
         location: json["location"],
