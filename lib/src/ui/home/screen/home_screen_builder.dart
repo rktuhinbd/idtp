@@ -9,7 +9,7 @@ import 'package:idtp/src/utils/toast.dart';
 class HomeScreenBuilder extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    String mobile = "01841752601";
+    String mobile = "01841752600";
 
     BlocProvider.of<HomeBloc>(context)
         .add(UserExistenceCheckEvent(mobile: mobile));
@@ -71,45 +71,6 @@ class HomeScreenBuilder extends StatelessWidget {
         SizedBox(
           height: 16,
         ),
-        Container(
-            width: double.infinity,
-            height: 48,
-            child: new MaterialButton(
-              onPressed: () {},
-              color: Colors.green,
-              child: Text(
-                'Transaction History',
-                style: TextStyle(color: Colors.white, fontSize: 16),
-              ),
-            )),
-        SizedBox(
-          height: 16,
-        ),
-        Container(
-            width: double.infinity,
-            height: 48,
-            child: new MaterialButton(
-              onPressed: () {},
-              color: Colors.green,
-              child: Text(
-                'Fund Transfer',
-                style: TextStyle(color: Colors.white, fontSize: 16),
-              ),
-            )),
-        SizedBox(
-          height: 16,
-        ),
-        Container(
-            width: double.infinity,
-            height: 48,
-            child: new MaterialButton(
-              onPressed: () {},
-              color: Colors.green,
-              child: Text(
-                'Request to Pay',
-                style: TextStyle(color: Colors.white, fontSize: 16),
-              ),
-            ))
       ],
     ));
   }

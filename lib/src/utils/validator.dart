@@ -38,14 +38,14 @@ String validateEmail(String value) {
 }
 
 /// VID validation
-String validateVID(String value) {
-  if (value.isEmpty) {
-    return "Virtual ID can't be empty";
-  } else if (!isEmail(value)) {
-    return "Please enter valid Virtual ID";
-  } else
-    return null;
-}
+// String validateVID(String value) {
+//   if (value.isEmpty) {
+//     return "Virtual ID can't be empty";
+//   } else if (!isEmail(value)) {
+//     return "Please enter valid Virtual ID";
+//   } else
+//     return null;
+// }
 
 /// Password validation
 String validatePassword(String value, String password, bool validateConfirm) {

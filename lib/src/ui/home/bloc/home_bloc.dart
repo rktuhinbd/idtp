@@ -1,5 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:idtp/src/service/registration_service.dart';
+import 'package:idtp/src/repository/registration_repository.dart';
 
 import 'home_event.dart';
 import 'home_state.dart';
@@ -13,7 +13,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       yield LoadingHomeState();
       try {
         var response =
-            await RegistrationService().idtpUserExistenceCheck(event.mobile);
+            await RegistrationRepository().idtpUserExistenceCheck(event.mobile);
         print(response);
         if (response.requestedVirtualId == null) {
           yield IsRegistrationPossibleState(isRegistrationPossible: true);

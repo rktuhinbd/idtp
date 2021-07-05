@@ -14,3 +14,5 @@ class LoadingRegistrationState extends RegistrationState {}
 class UserValidationState extends RegistrationState {}
 
 class UserRegistrationState extends RegistrationState {}
+
+class UserRegistrationSuccessState extends RegistrationState {}
