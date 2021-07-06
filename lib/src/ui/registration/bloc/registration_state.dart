@@ -15,4 +15,11 @@ class UserValidationState extends RegistrationState {}
 
 class UserRegistrationState extends RegistrationState {}
 
-class UserRegistrationSuccessState extends RegistrationState {}
+class UserRegistrationSuccessState extends RegistrationState {
+  bool isValidUser;
+
+  UserRegistrationSuccessState({@required isValidUser});
+
+  @override
+  List<Object> get props => [isValidUser];
+}

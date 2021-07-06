@@ -5,7 +5,7 @@ import 'package:idtp/src/model/validate_idtp_user_request.dart';
 import 'package:idtp/src/ui/registration/bloc/registration_bloc.dart';
 import 'package:idtp/src/ui/registration/bloc/registration_event.dart';
 import 'package:idtp/src/ui/registration/bloc/registration_state.dart';
-import 'package:idtp/src/utils/toast.dart';
+import 'package:idtp/src/utils/my_alert_dialog.dart';
 import 'package:idtp/src/utils/validator.dart';
 import 'package:validators/validators.dart';
 
@@ -20,19 +20,13 @@ class _RegistrationBuilderScreenState extends State<RegistrationBuilderScreen> {
   FocusNode _focusNode = new FocusNode();
 
   TextEditingController requestedVIDController = TextEditingController();
-
   TextEditingController idtpPinController = TextEditingController();
-
   TextEditingController confirmIdtpPinController = TextEditingController();
 
   RegistrationRequest registrationRequest = new RegistrationRequest();
-
   String requestedVID;
-
   String idtpPin;
-
   String confirmIdtpPin;
-
   bool isValidUser = true;
 
   @override
@@ -76,7 +70,7 @@ class _RegistrationBuilderScreenState extends State<RegistrationBuilderScreen> {
                   UserRegistrationEvent(
                       registrationRequest: registrationRequest));
             } else {
-              showToast("Registration data missing");
+              myAlertDialog("Registration data missing", context);
             }
           }
         },
@@ -97,9 +91,9 @@ class _RegistrationBuilderScreenState extends State<RegistrationBuilderScreen> {
       return "Virtual ID can't be empty";
     } else if (!isEmail(value)) {
       return "Please enter valid Virtual ID";
-    } else if(!isValidUser){
+    } else if (!isValidUser) {
       return "User Already Exists";
-    }else
+    } else
       return null;
   }
 
@@ -109,24 +103,35 @@ class _RegistrationBuilderScreenState extends State<RegistrationBuilderScreen> {
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        TextFormField(
-          controller: requestedVIDController,
-          keyboardType: TextInputType.emailAddress,
-          textInputAction: TextInputAction.next,
-          validator: (value) => validateVID(value),
-          onChanged: (value) => {requestedVID = value},
-          focusNode: _focusNode,
-          onSaved: (String value) {
-            requestedVID = value;
-          },
-          decoration: InputDecoration(
-              border: OutlineInputBorder(),
-              prefixIcon: Icon(Icons.email),
-              suffixText: 'example@user.idtp',
-              labelText: 'Requested Virtual ID',
-              floatingLabelBehavior: FloatingLabelBehavior.auto,
-              contentPadding: EdgeInsets.fromLTRB(12, 0, 12, 0)),
-        ),
+        BlocBuilder<RegistrationBloc, RegistrationState>(
+            builder: (context, state) {
+          if (state is UserRegistrationSuccessState) {
+            if (state.isValidUser != null) {
+              this.isValidUser = state.isValidUser;
+            } else {
+              this.isValidUser = true;
+            }
+          }
+
+          return TextFormField(
+            controller: requestedVIDController,
+            keyboardType: TextInputType.emailAddress,
+            textInputAction: TextInputAction.next,
+            validator: (value) => validateVID(value),
+            onChanged: (value) => {requestedVID = value},
+            focusNode: _focusNode,
+            onSaved: (String value) {
+              requestedVID = value;
+            },
+            decoration: InputDecoration(
+                border: OutlineInputBorder(),
+                prefixIcon: Icon(Icons.email),
+                suffixText: 'example@user.idtp',
+                labelText: 'Requested Virtual ID',
+                floatingLabelBehavior: FloatingLabelBehavior.auto,
+                contentPadding: EdgeInsets.fromLTRB(12, 0, 12, 0)),
+          );
+        }),
         SizedBox(
           height: 16,
         ),
@@ -176,13 +181,9 @@ class _RegistrationBuilderScreenState extends State<RegistrationBuilderScreen> {
             child: new MaterialButton(
               onPressed: () {
                 if (formKey.currentState.validate()) {
-                  print("Requested VID: " + requestedVIDController.text);
-                  print("IDTP Pin: " + idtpPinController.text);
-
                   ///=== Registration data setting === ///
                   List<CredData> credData2 = [
-                    // CredData(data: idtpPinController.text, type: "IDTP_PIN"),
-                    CredData(data: "123456", type: "IDTP_PIN"),
+                    CredData(data: idtpPinController.text, type: "IDTP_PIN"),
                     CredData(data: "Test123@", type: "APP_PASS")
                   ];
 
@@ -192,18 +193,16 @@ class _RegistrationBuilderScreenState extends State<RegistrationBuilderScreen> {
                     UserReqs(
                         credData: credData2,
                         accountNumber: "0031020007984",
+                        //Todo need to make it dynamic
                         callFrom: "FIApp",
                         infoEmail: "safihoacc@gmail.com",
+                        //Todo need to make it dynamic
                         requestedVirtualID: requestedVIDController.text,
-                        // requestedVirtualID: "mhknayan77@user.idtp",
                         password: "Alar@321",
                         deviceInf: DeviceInf(mobileNo: "01711821618"))
+                    //Todo need to make it dynamic
                   ];
                   registrationRequest.userReqs = userReqs;
-
-                  // showToast("Validation Completed.");
-                } else {
-                  // showToast("Validation Incomplete!");
                 }
               },
               color: Colors.green,

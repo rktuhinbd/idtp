@@ -11,7 +11,6 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
     if (event is LoadingDashboardEvent) {
       yield LoadingDashboardState();
       try {
-        // var response = await RegistrationService().idtpUserExistenceCheck(event.mobile);
 
       } catch (e) {
         print(e);

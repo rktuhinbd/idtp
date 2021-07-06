@@ -4,7 +4,7 @@ import 'package:idtp/src/ui/home/bloc/home_bloc.dart';
 import 'package:idtp/src/ui/home/bloc/home_event.dart';
 import 'package:idtp/src/ui/home/bloc/home_state.dart';
 import 'package:idtp/src/ui/registration/screen/registration_screen.dart';
-import 'package:idtp/src/utils/toast.dart';
+import 'package:idtp/src/utils/my_alert_dialog.dart';
 
 class HomeScreenBuilder extends StatelessWidget {
   @override
@@ -50,14 +50,14 @@ class HomeScreenBuilder extends StatelessWidget {
                 height: 48,
                 child: new MaterialButton(
                   onPressed: () {
-                    if (registrationFlag) {
+                    if (!registrationFlag) {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
                             builder: (context) => RegistrationScreen()),
                       );
                     } else {
-                      showToast("Can not register");
+                      myAlertDialog("Can not register!", context);
                     }
                   },
                   color: Colors.green,
@@ -67,10 +67,7 @@ class HomeScreenBuilder extends StatelessWidget {
                   ),
                 ));
           },
-        ),
-        SizedBox(
-          height: 16,
-        ),
+        )
       ],
     ));
   }

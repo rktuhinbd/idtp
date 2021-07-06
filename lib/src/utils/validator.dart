@@ -85,6 +85,16 @@ String validateIdtpPin(String value, String idtp, bool confirmIdtp) {
 }
 
 /// Account number validation
+String validateAmount(String value) {
+  if (value.isEmpty) {
+    return "Amount can't be empty";
+  } else if (!isNumeric(value)) {
+    return "Please enter number only";
+  } else
+    return null;
+}
+
+/// Account number validation
 String validateAccountNumber(String value) {
   if (value.isEmpty) {
     return "Account number can't be empty";

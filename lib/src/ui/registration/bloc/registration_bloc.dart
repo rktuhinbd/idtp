@@ -1,9 +1,5 @@
-import 'dart:js';
-
-import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:idtp/src/repository/registration_repository.dart';
-import 'package:idtp/src/ui/dashboard/screen/dashboard_screen.dart';
+import 'package:idtp/src/repository/repository.dart';
 import 'package:idtp/src/ui/registration/bloc/registration_state.dart';
 import 'package:idtp/src/utils/toast.dart';
 
@@ -16,23 +12,19 @@ class RegistrationBloc extends Bloc<RegistrationEvent, RegistrationState> {
   Stream<RegistrationState> mapEventToState(RegistrationEvent event) async* {
     if (event is InitRegistrationEvent) {
       yield LoadingRegistrationState();
-      try {} catch (e) {
-        print(e);
-      }
     }
 
     if (event is UserValidationEvent) {
-      yield LoadingRegistrationState();
-
       try {
-        var response = await RegistrationRepository()
-            .validateIdtpUser(event.validateIdtpUserRequest);
+        var response =
+            await Repository().validateIdtpUser(event.validateIdtpUserRequest);
         print(response);
         if (response.code == "200") {
+          yield UserRegistrationSuccessState(isValidUser: false);
           showToast(
               "This VID is already registered, please try with other VID");
         } else {
-          yield UserRegistrationState();
+          yield UserRegistrationSuccessState(isValidUser: true);
         }
       } catch (e) {}
     }
@@ -41,17 +33,11 @@ class RegistrationBloc extends Bloc<RegistrationEvent, RegistrationState> {
       yield UserRegistrationState();
 
       try {
-        var response = await RegistrationRepository()
-            .registerIdtpUser(event.registrationRequest);
+        var response =
+            await Repository().registerIdtpUser(event.registrationRequest);
         print(response);
         if (response.code == "200") {
           yield UserRegistrationSuccessState();
-
-          // Navigator.push(
-          //   context,
-          //   MaterialPageRoute(
-          //       builder: (context) => DashboardScreen()),
-          // );
 
           showToast("User registration successful");
         }

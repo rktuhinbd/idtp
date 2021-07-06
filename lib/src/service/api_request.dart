@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
-import 'package:http/http.dart';
 import 'package:idtp/src/service/network_exception.dart';
 
 class ApiRequest {
@@ -24,7 +23,7 @@ class ApiRequest {
       final response = await request.send();
 
       return _response(response);
-    } catch(e){
+    } catch (e) {
       print("Exception: $e");
     }
   }
@@ -47,27 +46,25 @@ class ApiRequest {
       final response = await request.send();
 
       return _response(response);
-    } catch(e){
+    } catch (e) {
       print("Exception: $e");
     }
-
   }
 
   static dynamic _response(var res) async {
-
     http.Response response = await http.Response.fromStream(res);
-    print("REs-COde-> ${response.statusCode}");
+    print("Res-Code-> ${response.statusCode}");
 
     switch (response.statusCode) {
       case 200:
         var responseJson = utf8.decode(response.bodyBytes);
-        print("Decoded REsponse >" + responseJson);
+        print("Decoded Response =>" + responseJson);
 
         return responseJson;
 
       case 201:
         var responseJson = utf8.decode(response.bodyBytes);
-        print("Decoded REsponse >" + responseJson);
+        print("Decoded Response =>" + responseJson);
 
         return responseJson;
 
@@ -95,7 +92,7 @@ class ApiRequest {
 
       case 405:
         var responseJson = utf8.decode(response.bodyBytes);
-        print("Decoded Response >" + responseJson);
+        print("Decoded Response =>" + responseJson);
 
         return responseJson;
 
@@ -105,13 +102,13 @@ class ApiRequest {
 
       case 497:
         var responseJson = utf8.decode(response.bodyBytes);
-        print("Decoded Response >" + responseJson);
+        print("Decoded Response =>" + responseJson);
 
         return responseJson;
       case 498:
       case 499:
         var responseJson = utf8.decode(response.bodyBytes);
-        print("Decoded Response >" + responseJson);
+        print("Decoded Response =>" + responseJson);
 
         return "OTP";
       case 979:

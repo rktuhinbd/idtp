@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:idtp/src/ui/dashboard/bloc/dashboard_bloc.dart';
+import 'package:idtp/src/ui/dashboard/screen/dashboard_screen.dart';
 import 'package:idtp/src/ui/home/bloc/home_bloc.dart';
 import 'package:idtp/src/ui/home/screen/home_screen.dart';
 
@@ -19,8 +21,8 @@ class MyApp extends StatelessWidget {
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       home: BlocProvider(
-        create: (context) => HomeBloc(),
-        child: HomeScreen(),
+        create: (context) => DashboardBloc(),
+        child: DashboardScreen(),
       ),
     );
   }
