@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:idtp/src/ui/create_rtp/screen/create_rtp_screen.dart';
 import 'package:idtp/src/ui/dashboard/bloc/dashboard_bloc.dart';
 import 'package:idtp/src/ui/dashboard/bloc/dashboard_state.dart';
 import 'package:idtp/src/ui/fund_transfer/screen/fund_transfer_screen.dart';
@@ -29,10 +30,12 @@ class DashboardScreenBuilder extends StatelessWidget {
             width: double.infinity,
             height: 48,
             child: new MaterialButton(
-              onPressed: () {},
+              onPressed: () {
+
+              },
               color: Colors.green,
               child: Text(
-                'Transaction Dashboard',
+                'Transaction History',
                 style: TextStyle(color: Colors.white, fontSize: 16),
               ),
             )),
@@ -62,7 +65,12 @@ class DashboardScreenBuilder extends StatelessWidget {
             width: double.infinity,
             height: 48,
             child: new MaterialButton(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => CreateRTPScreen()),
+                );
+              },
               color: Colors.green,
               child: Text(
                 'Request to Pay',

@@ -1,3 +1,5 @@
+import 'package:idtp/src/model/create_rtp_request.dart';
+import 'package:idtp/src/model/create_rtp_response.dart';
 import 'package:idtp/src/model/fund_transfer_request.dart';
 import 'package:idtp/src/model/fund_transfer_response.dart';
 import 'package:idtp/src/model/registration_request.dart';
@@ -67,6 +69,23 @@ class Repository {
 
     try {
       finalOutput = fundTransferResponseFromJson(data);
+    } catch (e) {
+      print(e);
+    }
+    return finalOutput;
+  }
+
+  Future<dynamic> createRTP(fundTransferRequest) async {
+    var finalOutput;
+    var res = await ApiRequest.post(
+        "financial/CreateRTP", createRtpRequestToJson(fundTransferRequest));
+
+    print("Response=>$res");
+
+    String data = res;
+
+    try {
+      finalOutput = createRtpResponseFromJson(data);
     } catch (e) {
       print(e);
     }
