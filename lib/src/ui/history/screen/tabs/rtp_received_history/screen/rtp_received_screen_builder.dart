@@ -14,15 +14,20 @@ class RtpReceivedScreenBuilder extends StatefulWidget {
 }
 
 class _RtpReceivedScreenBuilderState extends State<RtpReceivedScreenBuilder> {
-  RtpReceivedListRequest rtpReceivedListRequest = new RtpReceivedListRequest();
-
-  ///=== Transaction history data setting === ///
-  List<CredDatum> credData = [
-    CredDatum(data: "123456", type: "IDTP_PIN"),
-  ];
-
   @override
-  Widget build(BuildContext context) {
+  void initState() {
+    super.initState();
+    getRtpReceivedList();
+  }
+
+  void getRtpReceivedList() {
+    ///=== Transaction history data setting === ///
+    List<CredDatum> credData = [
+      CredDatum(data: "123456", type: "IDTP_PIN"),
+    ];
+
+    RtpReceivedListRequest rtpReceivedListRequest =
+        new RtpReceivedListRequest();
     rtpReceivedListRequest.channelId = "Mobile";
     rtpReceivedListRequest.deviceInf = DeviceInf();
     rtpReceivedListRequest.credData = credData;
@@ -30,16 +35,16 @@ class _RtpReceivedScreenBuilderState extends State<RtpReceivedScreenBuilder> {
     rtpReceivedListRequest.pageSize = 50;
     rtpReceivedListRequest.userVid = "karim@user.idtp";
 
+    ///=== Rtp Received history api call === ///
+    BlocProvider.of<RtpReceivedBloc>(context).add(LoadingRtpReceivedEvent(
+        rtpReceivedListRequest: rtpReceivedListRequest));
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return BlocListener<RtpReceivedBloc, RtpReceivedState>(
         listener: (context, state) {
-          if (state is LoadingRtpReceivedState) {
-            if (rtpReceivedListRequest != null) {
-              ///=== Rtp Received history api call === ///
-              BlocProvider.of<RtpReceivedBloc>(context).add(
-                  LoadingRtpReceivedEvent(
-                      rtpReceivedListRequest: rtpReceivedListRequest));
-            }
-          }
+          if (state is LoadingRtpReceivedState) {}
         },
         child: Container(
           height: double.infinity,

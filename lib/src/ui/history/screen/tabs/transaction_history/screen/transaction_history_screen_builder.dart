@@ -13,39 +13,44 @@ class TransactionHistoryScreenBuilder extends StatefulWidget {
       _TransactionHistoryScreenBuilderState();
 }
 
-class _TransactionHistoryScreenBuilderState extends State<TransactionHistoryScreenBuilder> {
+class _TransactionHistoryScreenBuilderState
+    extends State<TransactionHistoryScreenBuilder> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getTransactionHistory();
+  }
 
-  TransactionsByUserRequest getTransactionsByUserRequest =
-  new TransactionsByUserRequest();
+  void getTransactionHistory() {
+    TransactionsByUserRequest transactionsByUserRequest =
+        new TransactionsByUserRequest();
 
-  ///=== Transaction history data setting === ///
-  List<CredDatum> credData = [
-    CredDatum(data: "123456", type: "IDTP_PIN"),
-  ];
+    ///=== Transaction history data setting === ///
+    List<CredDatum> credData = [
+      CredDatum(data: "123456", type: "IDTP_PIN"),
+    ];
+
+    transactionsByUserRequest.channel = "Mobile";
+    transactionsByUserRequest.deviceInf = DeviceInf();
+    transactionsByUserRequest.credData = credData;
+    transactionsByUserRequest.fromDate = "2020-07-01";
+    transactionsByUserRequest.toDate = "2020-07-07";
+    transactionsByUserRequest.pageNo = "1";
+    transactionsByUserRequest.pageSize = "100";
+    transactionsByUserRequest.userVid = "karim@user.idtp";
+
+    ///=== Rtp sent history api call === ///
+    BlocProvider.of<TransactionHistoryBloc>(context).add(
+        LoadingTransactionHistoryEvent(
+            transactionsByUserRequest: transactionsByUserRequest));
+  }
 
   @override
   Widget build(BuildContext context) {
-
-    getTransactionsByUserRequest.channel = "Mobile";
-    getTransactionsByUserRequest.deviceInf = DeviceInf();
-    getTransactionsByUserRequest.credData = credData;
-    getTransactionsByUserRequest.fromDate = "2020-07-01";
-    getTransactionsByUserRequest.toDate = "2020-07-07";
-    getTransactionsByUserRequest.pageNo = "1";
-    getTransactionsByUserRequest.pageSize = "100";
-    getTransactionsByUserRequest.userVid = "karim@user.idtp";
-
     return BlocListener<TransactionHistoryBloc, TransactionHistoryState>(
         listener: (context, state) {
-          if (state is LoadingTransactionHistoryState) {
-            if (getTransactionsByUserRequest != null) {
-              ///=== Transaction history api call === ///
-              BlocProvider.of<TransactionHistoryBloc>(context).add(
-                  LoadingTransactionHistoryEvent(
-                      getTransactionsByUserRequest:
-                          getTransactionsByUserRequest));
-            }
-          }
+          if (state is LoadingTransactionHistoryState) {}
         },
         child: Container(
           height: double.infinity,

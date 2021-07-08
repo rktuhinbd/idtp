@@ -7,12 +7,12 @@ abstract class TransactionHistoryEvent extends Equatable {
 }
 
 class LoadingTransactionHistoryEvent extends TransactionHistoryEvent {
-  final TransactionsByUserRequest getTransactionsByUserRequest;
+  final TransactionsByUserRequest transactionsByUserRequest;
 
-  const LoadingTransactionHistoryEvent({@required this.getTransactionsByUserRequest});
+  const LoadingTransactionHistoryEvent({@required this.transactionsByUserRequest});
 
   @override
-  List<Object> get props => [getTransactionsByUserRequest];
+  List<Object> get props => [transactionsByUserRequest];
 }
 
 class LoadedTransactionHistoryEvent extends TransactionHistoryEvent {

@@ -14,7 +14,7 @@ class TransactionHistoryBloc
     if (event is LoadingTransactionHistoryEvent) {
       yield LoadingTransactionHistoryState();
       var response = await Repository()
-          .getTransactionsByUser(event.getTransactionsByUserRequest);
+          .getTransactionsByUser(event.transactionsByUserRequest);
 
       if (response.code == "200") {
         yield LoadedTransactionHistoryState();

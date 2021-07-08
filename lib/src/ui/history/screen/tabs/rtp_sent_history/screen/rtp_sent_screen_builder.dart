@@ -9,22 +9,24 @@ class RtpSentScreenBuilder extends StatefulWidget {
   const RtpSentScreenBuilder({Key key}) : super(key: key);
 
   @override
-  _RtpSentScreenBuilderState createState() =>
-      _RtpSentScreenBuilderState();
+  _RtpSentScreenBuilderState createState() => _RtpSentScreenBuilderState();
 }
 
 class _RtpSentScreenBuilderState extends State<RtpSentScreenBuilder> {
-
-  RtpSentListRequest rtpSentListRequest =
-  new RtpSentListRequest();
-
-  ///=== Transaction history data setting === ///
-  List<CredDatum> credData = [
-    CredDatum(data: "123456", type: "IDTP_PIN"),
-  ];
-
   @override
-  Widget build(BuildContext context) {
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getSentRtpList();
+  }
+
+  void getSentRtpList() {
+    RtpSentListRequest rtpSentListRequest = new RtpSentListRequest();
+
+    ///=== Transaction history data setting === ///
+    List<CredDatum> credData = [
+      CredDatum(data: "123456", type: "IDTP_PIN"),
+    ];
 
     rtpSentListRequest.channelId = "Mobile";
     rtpSentListRequest.deviceInf = DeviceInf();
@@ -33,17 +35,16 @@ class _RtpSentScreenBuilderState extends State<RtpSentScreenBuilder> {
     rtpSentListRequest.pageSize = 50;
     rtpSentListRequest.userVid = "karim@user.idtp";
 
+    ///=== Rtp sent history api call === ///
+    BlocProvider.of<RtpSentBloc>(context)
+        .add(LoadingRtpSentEvent(rtpSentListRequest: rtpSentListRequest));
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return BlocListener<RtpSentBloc, RtpSentState>(
         listener: (context, state) {
-          if (state is LoadingRtpSentState) {
-            if (rtpSentListRequest != null) {
-              ///=== Rtp sent history api call === ///
-              BlocProvider.of<RtpSentBloc>(context).add(
-                  LoadingRtpSentEvent(
-                      rtpSentListRequest:
-                      rtpSentListRequest));
-            }
-          }
+          if (state is LoadingRtpSentState) {}
         },
         child: Container(
           height: double.infinity,
