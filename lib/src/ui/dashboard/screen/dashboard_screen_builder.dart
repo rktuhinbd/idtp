@@ -4,6 +4,7 @@ import 'package:idtp/src/ui/create_rtp/screen/create_rtp_screen.dart';
 import 'package:idtp/src/ui/dashboard/bloc/dashboard_bloc.dart';
 import 'package:idtp/src/ui/dashboard/bloc/dashboard_state.dart';
 import 'package:idtp/src/ui/fund_transfer/screen/fund_transfer_screen.dart';
+import 'package:idtp/src/ui/history/screen/history_screen.dart';
 
 class DashboardScreenBuilder extends StatelessWidget {
   @override
@@ -31,7 +32,10 @@ class DashboardScreenBuilder extends StatelessWidget {
             height: 48,
             child: new MaterialButton(
               onPressed: () {
-
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => HistoryScreen()),
+                );
               },
               color: Colors.green,
               child: Text(

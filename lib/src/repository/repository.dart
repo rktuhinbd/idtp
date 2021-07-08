@@ -3,6 +3,12 @@ import 'package:idtp/src/model/create_rtp_response.dart';
 import 'package:idtp/src/model/fund_transfer_request.dart';
 import 'package:idtp/src/model/fund_transfer_response.dart';
 import 'package:idtp/src/model/registration_request.dart';
+import 'package:idtp/src/model/rtp_received_list_request.dart';
+import 'package:idtp/src/model/rtp_received_list_response.dart';
+import 'package:idtp/src/model/rtp_sent_list_request.dart';
+import 'package:idtp/src/model/rtp_sent_list_response.dart';
+import 'package:idtp/src/model/transactions_by_user_request.dart';
+import 'package:idtp/src/model/transactions_by_user_response.dart';
 import 'package:idtp/src/model/user_existence_check_response.dart';
 import 'package:idtp/src/model/validate_idtp_user_request.dart';
 import 'package:idtp/src/service/api_request.dart';
@@ -75,10 +81,10 @@ class Repository {
     return finalOutput;
   }
 
-  Future<dynamic> createRTP(fundTransferRequest) async {
+  Future<dynamic> createRTP(createRtpRequest) async {
     var finalOutput;
     var res = await ApiRequest.post(
-        "financial/CreateRTP", createRtpRequestToJson(fundTransferRequest));
+        "financial/CreateRTP", createRtpRequestToJson(createRtpRequest));
 
     print("Response=>$res");
 
@@ -86,6 +92,57 @@ class Repository {
 
     try {
       finalOutput = createRtpResponseFromJson(data);
+    } catch (e) {
+      print(e);
+    }
+    return finalOutput;
+  }
+
+  Future<dynamic> getTransactionsByUser(getTransactionsByUserRequest) async {
+    var finalOutput;
+    var res = await ApiRequest.post("management/GetTransactionsbyUser",
+        getTransactionsByUserRequestToJson(getTransactionsByUserRequest));
+
+    print("Response=>$res");
+
+    String data = res;
+
+    try {
+      finalOutput = getTransactionsByUserResponseFromJson(data);
+    } catch (e) {
+      print(e);
+    }
+    return finalOutput;
+  }
+
+  Future<dynamic> getRtpSentList(rtpSentRequest) async {
+    var finalOutput;
+    var res = await ApiRequest.post(
+        "management/GetRTPListSent", rtpSentListRequestToJson(rtpSentRequest));
+
+    print("Response=>$res");
+
+    String data = res;
+
+    try {
+      finalOutput = rtpSentListResponseFromJson(data);
+    } catch (e) {
+      print(e);
+    }
+    return finalOutput;
+  }
+
+  Future<dynamic> getRtpReceivedList(rtpReceivedRequest) async {
+    var finalOutput;
+    var res = await ApiRequest.post(
+        "management/GetRTPListReceived", rtpReceivedListRequestToJson(rtpReceivedRequest));
+
+    print("Response=>$res");
+
+    String data = res;
+
+    try {
+      finalOutput = rtpReceivedListResponseFromJson(data);
     } catch (e) {
       print(e);
     }
