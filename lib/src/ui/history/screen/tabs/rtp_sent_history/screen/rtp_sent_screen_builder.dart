@@ -48,7 +48,7 @@ class _RtpSentScreenBuilderState extends State<RtpSentScreenBuilder> {
         child: Container(
           height: double.infinity,
           width: double.infinity,
-          color: Colors.white,
+          color: Colors.grey.shade300,
         ));
   }
 }
