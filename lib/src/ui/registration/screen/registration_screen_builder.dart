@@ -5,7 +5,7 @@ import 'package:idtp/src/model/validate_idtp_user_request.dart';
 import 'package:idtp/src/ui/registration/bloc/registration_bloc.dart';
 import 'package:idtp/src/ui/registration/bloc/registration_event.dart';
 import 'package:idtp/src/ui/registration/bloc/registration_state.dart';
-import 'package:idtp/src/utils/my_alert_dialog.dart';
+import 'package:idtp/src/ui/widget/my_alert_dialog.dart';
 import 'package:idtp/src/utils/validator.dart';
 import 'package:validators/validators.dart';
 
@@ -70,7 +70,7 @@ class _RegistrationBuilderScreenState extends State<RegistrationBuilderScreen> {
                   UserRegistrationEvent(
                       registrationRequest: registrationRequest));
             } else {
-              myAlertDialog("Registration data missing", context);
+              myAlertDialog(context, "Info", "Registration data missing");
             }
           }
         },

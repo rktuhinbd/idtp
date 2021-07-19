@@ -1,11 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-myAlertDialog(message, context) {
+myAlertDialog(context, title, message) {
   return showDialog(
     context: context,
     builder: (context) => CupertinoAlertDialog(
-        title: Text("Info"),
+        title: Text(title),
         content: Text(message),
         actions: <Widget>[
           CupertinoDialogAction(

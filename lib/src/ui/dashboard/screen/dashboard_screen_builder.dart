@@ -5,6 +5,7 @@ import 'package:idtp/src/ui/dashboard/bloc/dashboard_bloc.dart';
 import 'package:idtp/src/ui/dashboard/bloc/dashboard_state.dart';
 import 'package:idtp/src/ui/fund_transfer/screen/fund_transfer_screen.dart';
 import 'package:idtp/src/ui/history/screen/history_screen.dart';
+import 'package:idtp/src/ui/metro_rail_payment/screen/metro_rail_payment_screen.dart';
 
 class DashboardScreenBuilder extends StatelessWidget {
   @override
@@ -78,6 +79,25 @@ class DashboardScreenBuilder extends StatelessWidget {
               color: Colors.green,
               child: Text(
                 'Request to Pay',
+                style: TextStyle(color: Colors.white, fontSize: 16),
+              ),
+            )),
+        SizedBox(
+          height: 16,
+        ),
+        Container(
+            width: double.infinity,
+            height: 48,
+            child: new MaterialButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => MetroRailPaymentScreen()),
+                );
+              },
+              color: Colors.green,
+              child: Text(
+                'Metro Rail Refill',
                 style: TextStyle(color: Colors.white, fontSize: 16),
               ),
             ))

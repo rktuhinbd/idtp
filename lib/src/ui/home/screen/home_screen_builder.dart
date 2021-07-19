@@ -4,7 +4,7 @@ import 'package:idtp/src/ui/home/bloc/home_bloc.dart';
 import 'package:idtp/src/ui/home/bloc/home_event.dart';
 import 'package:idtp/src/ui/home/bloc/home_state.dart';
 import 'package:idtp/src/ui/registration/screen/registration_screen.dart';
-import 'package:idtp/src/utils/my_alert_dialog.dart';
+import 'package:idtp/src/ui/widget/my_alert_dialog.dart';
 
 class HomeScreenBuilder extends StatelessWidget {
   @override
@@ -57,7 +57,7 @@ class HomeScreenBuilder extends StatelessWidget {
                             builder: (context) => RegistrationScreen()),
                       );
                     } else {
-                      myAlertDialog("Can not register!", context);
+                      myAlertDialog(context, "Info", "Can not register!");
                     }
                   },
                   color: Colors.green,

@@ -15,16 +15,16 @@ class RtpReceivedListRequest {
   });
 
   String channelId;
-  List<CredDatum> credData;
-  DeviceInf deviceInf;
+  List<CredData> credData;
+  DeviceInfo deviceInf;
   int pageNumber;
   int pageSize;
   String userVid;
 
   factory RtpReceivedListRequest.fromJson(Map<String, dynamic> json) => RtpReceivedListRequest(
     channelId: json["channelId"],
-    credData: List<CredDatum>.from(json["credData"].map((x) => CredDatum.fromJson(x))),
-    deviceInf: DeviceInf.fromJson(json["deviceInf"]),
+    credData: List<CredData>.from(json["credData"].map((x) => CredData.fromJson(x))),
+    deviceInf: DeviceInfo.fromJson(json["deviceInf"]),
     pageNumber: json["pageNumber"],
     pageSize: json["pageSize"],
     userVid: json["userVid"],
@@ -40,8 +40,8 @@ class RtpReceivedListRequest {
   };
 }
 
-class CredDatum {
-  CredDatum({
+class CredData {
+  CredData({
     this.data,
     this.subtype,
     this.type,
@@ -51,7 +51,7 @@ class CredDatum {
   String subtype;
   String type;
 
-  factory CredDatum.fromJson(Map<String, dynamic> json) => CredDatum(
+  factory CredData.fromJson(Map<String, dynamic> json) => CredData(
     data: json["data"],
     subtype: json["subtype"],
     type: json["type"],
@@ -64,8 +64,8 @@ class CredDatum {
   };
 }
 
-class DeviceInf {
-  DeviceInf({
+class DeviceInfo {
+  DeviceInfo({
     this.deviceId,
     this.ip,
     this.location,
@@ -77,7 +77,7 @@ class DeviceInf {
   String location;
   String mobileNo;
 
-  factory DeviceInf.fromJson(Map<String, dynamic> json) => DeviceInf(
+  factory DeviceInfo.fromJson(Map<String, dynamic> json) => DeviceInfo(
     deviceId: json["deviceID"],
     ip: json["ip"],
     location: json["location"],

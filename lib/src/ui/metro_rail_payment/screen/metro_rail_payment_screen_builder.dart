@@ -1,39 +1,38 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:idtp/src/model/fund_transfer_request.dart';
-import 'package:idtp/src/ui/fund_transfer/bloc/fund_transfer_bloc.dart';
-import 'package:idtp/src/ui/fund_transfer/bloc/fund_transfer_event.dart';
-import 'package:idtp/src/ui/fund_transfer/bloc/fund_transfer_state.dart';
+import 'package:idtp/src/ui/metro_rail_payment/bloc/metro_rail_payment_bloc.dart';
+import 'package:idtp/src/ui/metro_rail_payment/bloc/metro_rail_payment_event.dart';
+import 'package:idtp/src/ui/metro_rail_payment/bloc/metro_rail_payment_state.dart';
 import 'package:idtp/src/utils/validator.dart';
-import 'package:validators/validators.dart';
 
-class FundTransferScreenBuilder extends StatefulWidget {
-  const FundTransferScreenBuilder({Key key}) : super(key: key);
+class MetroRailPaymentScreenBuilder extends StatefulWidget {
+  const MetroRailPaymentScreenBuilder({Key key}) : super(key: key);
 
   @override
-  _FundTransferScreenBuilderState createState() =>
-      _FundTransferScreenBuilderState();
+  _MetroRailPaymentScreenBuilderState createState() =>
+      _MetroRailPaymentScreenBuilderState();
 }
 
-class _FundTransferScreenBuilderState extends State<FundTransferScreenBuilder> {
+class _MetroRailPaymentScreenBuilderState
+    extends State<MetroRailPaymentScreenBuilder> {
   final formKey = GlobalKey<FormState>();
   FocusNode _focusNode = new FocusNode();
 
-  TextEditingController requestedVIDController = TextEditingController();
+  TextEditingController mrtAccountNumber = TextEditingController();
   TextEditingController amountController = TextEditingController();
-  TextEditingController purposeController = TextEditingController();
   TextEditingController idtpPinController = TextEditingController();
 
   FundTransferRequest fundTransferRequest = new FundTransferRequest();
 
-  String requestedVID;
+  String mrtAccountNo;
   String amount;
   String purpose;
   String idtpPin;
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<FundTransferBloc, FundTransferState>(
+    return BlocListener<MetroRailPaymentBloc, MetroRailPaymentState>(
         listener: (context, state) {},
         child: Scaffold(
             body: Padding(
@@ -48,29 +47,8 @@ class _FundTransferScreenBuilderState extends State<FundTransferScreenBuilder> {
   String validateVID(String value) {
     if (value.isEmpty) {
       return "Virtual ID can't be empty";
-    } else if (!isEmail(value)) {
-      return "Please enter valid Virtual ID";
     } else
       return null;
-  }
-
-  void fundTransfer() {
-    fundTransferRequest.channelId = "Mobile";
-    fundTransferRequest.txnAmount = amountController.text;
-    fundTransferRequest.purpose = purposeController.text;
-    fundTransferRequest.senderVid =
-        "aib30008@user.idtp"; //Todo need to make is dynamic
-    fundTransferRequest.receiverVid = requestedVIDController.text;
-    fundTransferRequest.deviceInf = DeviceInf();
-    List<CredDatum> credData = [
-      CredDatum(data: idtpPinController.text, type: "IDTP_PIN"),
-    ];
-
-    fundTransferRequest.credData = credData;
-
-    ///=== Fund transfer api call === ///
-    BlocProvider.of<FundTransferBloc>(context).add(
-        LoadingFundTransferEvent(fundTransferRequest: fundTransferRequest));
   }
 
   Widget _fund_transfer_widget(BuildContext context) {
@@ -80,20 +58,19 @@ class _FundTransferScreenBuilderState extends State<FundTransferScreenBuilder> {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         TextFormField(
-          controller: requestedVIDController,
+          controller: mrtAccountNumber,
           keyboardType: TextInputType.emailAddress,
           textInputAction: TextInputAction.next,
           validator: (value) => validateVID(value),
-          onChanged: (value) => {requestedVID = value},
+          onChanged: (value) => {mrtAccountNo = value},
           focusNode: _focusNode,
           onSaved: (String value) {
-            requestedVID = value;
+            mrtAccountNo = value;
           },
           decoration: InputDecoration(
               border: OutlineInputBorder(),
               prefixIcon: Icon(Icons.email),
-              suffixText: 'example@user.idtp',
-              labelText: 'Receiver Virtual ID',
+              labelText: 'MRT Account No',
               floatingLabelBehavior: FloatingLabelBehavior.auto,
               contentPadding: EdgeInsets.fromLTRB(12, 0, 12, 0)),
         ),
@@ -113,24 +90,6 @@ class _FundTransferScreenBuilderState extends State<FundTransferScreenBuilder> {
               border: OutlineInputBorder(),
               prefixIcon: Icon(Icons.money),
               labelText: 'Amount',
-              floatingLabelBehavior: FloatingLabelBehavior.auto,
-              contentPadding: EdgeInsets.fromLTRB(12, 0, 12, 0)),
-        ),
-        SizedBox(
-          height: 16,
-        ),
-        TextFormField(
-          controller: purposeController,
-          keyboardType: TextInputType.text,
-          textInputAction: TextInputAction.next,
-          onChanged: (value) => {purpose = value},
-          onSaved: (String value) {
-            purpose = value;
-          },
-          decoration: InputDecoration(
-              border: OutlineInputBorder(),
-              prefixIcon: Icon(Icons.description),
-              labelText: 'Purpose',
               floatingLabelBehavior: FloatingLabelBehavior.auto,
               contentPadding: EdgeInsets.fromLTRB(12, 0, 12, 0)),
         ),
@@ -163,12 +122,28 @@ class _FundTransferScreenBuilderState extends State<FundTransferScreenBuilder> {
             child: new MaterialButton(
               onPressed: () {
                 if (formKey.currentState.validate()) {
-                  fundTransfer();
+                  fundTransferRequest.channelId = "Mobile";
+                  fundTransferRequest.txnAmount = amountController.text;
+                  fundTransferRequest.purpose = "MRT";
+                  fundTransferRequest.senderVid =
+                      "aib30008@user.idtp"; //Todo need to make is dynamic
+                  fundTransferRequest.receiverVid = mrtAccountNumber.text;
+                  fundTransferRequest.deviceInf = DeviceInf();
+                  List<CredDatum> credData = [
+                    CredDatum(data: idtpPinController.text, type: "IDTP_PIN"),
+                  ];
+
+                  fundTransferRequest.credData = credData;
+
+                  ///=== Mrt refill api call === ///
+                  BlocProvider.of<MetroRailPaymentBloc>(context).add(
+                      LoadingMetroRailPaymentEvent(
+                          fundTransferRequest: fundTransferRequest));
                 }
               },
               color: Colors.green,
               child: Text(
-                'Fund Transfer',
+                'MRT Refill',
                 style: TextStyle(color: Colors.white, fontSize: 16),
               ),
             ))

@@ -26,7 +26,9 @@ class RegistrationBloc extends Bloc<RegistrationEvent, RegistrationState> {
         } else {
           yield UserRegistrationSuccessState(isValidUser: true);
         }
-      } catch (e) {}
+      } catch (e) {
+        print(e);
+      }
     }
 
     if (event is UserRegistrationEvent) {
@@ -41,7 +43,9 @@ class RegistrationBloc extends Bloc<RegistrationEvent, RegistrationState> {
 
           showToast("User registration successful");
         }
-      } catch (e) {}
+      } catch (e) {
+        print(e);
+      }
     }
   }
 }

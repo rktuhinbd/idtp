@@ -41,11 +41,11 @@ class _TransactionHistoryScreenBuilderState
     transactionsByUserRequest.channel = "Mobile";
     transactionsByUserRequest.deviceInf = DeviceInf();
     transactionsByUserRequest.credData = credData;
-    transactionsByUserRequest.fromDate = "2020-07-10";
-    transactionsByUserRequest.toDate = "2020-07-11";
+    transactionsByUserRequest.fromDate = "2021-07-01";
+    transactionsByUserRequest.toDate = "2021-07-14";
     transactionsByUserRequest.pageNo = "1";
-    transactionsByUserRequest.pageSize = "100";
-    transactionsByUserRequest.userVid = "akib@user.idtp";
+    transactionsByUserRequest.pageSize = "20";
+    transactionsByUserRequest.userVid = "aib30008@user.idtp";
 
     ///=== Rtp sent history api call === ///
     BlocProvider.of<TransactionHistoryBloc>(context).add(
