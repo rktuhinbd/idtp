@@ -38,14 +38,14 @@ String validateEmail(String value) {
 }
 
 /// VID validation
-String validateVID(String value) {
-  if (value.isEmpty) {
-    return "Virtual ID can't be empty";
-  } else if (!isEmail(value)) {
-    return "Please enter valid Virtual ID";
-  } else
-    return null;
-}
+// String validateVID(String value) {
+//   if (value.isEmpty) {
+//     return "Virtual ID can't be empty";
+//   } else if (!isEmail(value)) {
+//     return "Please enter valid Virtual ID";
+//   } else
+//     return null;
+// }
 
 /// Password validation
 String validatePassword(String value, String password, bool validateConfirm) {
@@ -80,6 +80,16 @@ String validateIdtpPin(String value, String idtp, bool confirmIdtp) {
     return "Please enter only numbers as input";
   } else if (confirmIdtp && value != idtp) {
     return "Confirm Idtp pin doesn't match";
+  } else
+    return null;
+}
+
+/// Account number validation
+String validateAmount(String value) {
+  if (value.isEmpty) {
+    return "Amount can't be empty";
+  } else if (!isNumeric(value)) {
+    return "Please enter number only";
   } else
     return null;
 }

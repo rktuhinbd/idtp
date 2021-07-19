@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:idtp/src/model/registration_request.dart';
 import 'package:idtp/src/model/validate_idtp_user_request.dart';
 import 'package:meta/meta.dart';
 
@@ -28,20 +29,31 @@ class UserValidationEvent extends RegistrationEvent{
   }
 }
 
-// class UserRegistrationEvent extends RegistrationEvent{
-//   final String mobile;
-//
-//   const UserRegistrationEvent({@required this.mobile});
-//
-//   @override
-//   List<Object> get props => [mobile];
-// }
+class UserRegistrationEvent extends RegistrationEvent{
+  final RegistrationRequest registrationRequest;
 
-class RegistrationSuccessEvent extends RegistrationEvent{
-  final bool account;
-
-  const RegistrationSuccessEvent({@required this.account});
+  const UserRegistrationEvent({@required this.registrationRequest});
 
   @override
-  List<Object> get props => [account];
+  List<Object> get props => [registrationRequest];
+
+  @override
+  String toString() {
+    return 'UserRegistrationEvent{registrationRequest: $registrationRequest}';
+  }
 }
+
+class UserRegistrationSuccessfulEvent extends RegistrationEvent{
+  final bool isRegistrationSuccessful;
+
+  const UserRegistrationSuccessfulEvent({@required this.isRegistrationSuccessful});
+
+  @override
+  List<Object> get props => [isRegistrationSuccessful];
+
+  @override
+  String toString() {
+    return 'UserRegistrationSuccessfulEvent{isRegistrationSuccessful: $isRegistrationSuccessful}';
+  }
+}
+

@@ -1,5 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:idtp/src/service/registration_service.dart';
+import 'package:idtp/src/repository/repository.dart';
 import 'package:idtp/src/ui/registration/bloc/registration_state.dart';
 import 'package:idtp/src/utils/toast.dart';
 
@@ -10,44 +10,42 @@ class RegistrationBloc extends Bloc<RegistrationEvent, RegistrationState> {
 
   @override
   Stream<RegistrationState> mapEventToState(RegistrationEvent event) async* {
-
     if (event is InitRegistrationEvent) {
       yield LoadingRegistrationState();
-      try {} catch (e) {
-        print(e);
-      }
     }
 
-
     if (event is UserValidationEvent) {
-      yield LoadingRegistrationState();
-
       try {
-        var response = await RegistrationService()
-            .validateIdtpUser(event.validateIdtpUserRequest);
+        var response =
+            await Repository().validateIdtpUser(event.validateIdtpUserRequest);
         print(response);
         if (response.code == "200") {
+          yield UserRegistrationSuccessState(isValidUser: false);
           showToast(
               "This VID is already registered, please try with other VID");
         } else {
-        yield UserRegistrationState();
+          yield UserRegistrationSuccessState(isValidUser: true);
         }
-      } catch (e) {}
+      } catch (e) {
+        print(e);
+      }
     }
-
 
     if (event is UserRegistrationEvent) {
       yield UserRegistrationState();
 
       try {
-        var response = await RegistrationService()
-            .registerIdtpUser(event.registrationRequest);
+        var response =
+            await Repository().registerIdtpUser(event.registrationRequest);
         print(response);
         if (response.code == "200") {
+          yield UserRegistrationSuccessState();
+
           showToast("User registration successful");
         }
-      } catch (e) {}
+      } catch (e) {
+        print(e);
+      }
     }
-
   }
 }

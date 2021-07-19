@@ -4,12 +4,12 @@ import 'package:idtp/src/ui/home/bloc/home_bloc.dart';
 import 'package:idtp/src/ui/home/bloc/home_event.dart';
 import 'package:idtp/src/ui/home/bloc/home_state.dart';
 import 'package:idtp/src/ui/registration/screen/registration_screen.dart';
-import 'package:idtp/src/utils/toast.dart';
+import 'package:idtp/src/ui/widget/my_alert_dialog.dart';
 
 class HomeScreenBuilder extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    String mobile = "01841752601";
+    String mobile = "01841752600";
 
     BlocProvider.of<HomeBloc>(context)
         .add(UserExistenceCheckEvent(mobile: mobile));
@@ -50,14 +50,14 @@ class HomeScreenBuilder extends StatelessWidget {
                 height: 48,
                 child: new MaterialButton(
                   onPressed: () {
-                    if (registrationFlag) {
+                    if (!registrationFlag) {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
                             builder: (context) => RegistrationScreen()),
                       );
                     } else {
-                      showToast("Can not register");
+                      myAlertDialog(context, "Info", "Can not register!");
                     }
                   },
                   color: Colors.green,
@@ -67,49 +67,7 @@ class HomeScreenBuilder extends StatelessWidget {
                   ),
                 ));
           },
-        ),
-        SizedBox(
-          height: 16,
-        ),
-        Container(
-            width: double.infinity,
-            height: 48,
-            child: new MaterialButton(
-              onPressed: () {},
-              color: Colors.green,
-              child: Text(
-                'Transaction History',
-                style: TextStyle(color: Colors.white, fontSize: 16),
-              ),
-            )),
-        SizedBox(
-          height: 16,
-        ),
-        Container(
-            width: double.infinity,
-            height: 48,
-            child: new MaterialButton(
-              onPressed: () {},
-              color: Colors.green,
-              child: Text(
-                'Fund Transfer',
-                style: TextStyle(color: Colors.white, fontSize: 16),
-              ),
-            )),
-        SizedBox(
-          height: 16,
-        ),
-        Container(
-            width: double.infinity,
-            height: 48,
-            child: new MaterialButton(
-              onPressed: () {},
-              color: Colors.green,
-              child: Text(
-                'Request to Pay',
-                style: TextStyle(color: Colors.white, fontSize: 16),
-              ),
-            ))
+        )
       ],
     ));
   }

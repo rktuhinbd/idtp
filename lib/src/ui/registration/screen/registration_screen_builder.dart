@@ -5,11 +5,19 @@ import 'package:idtp/src/model/validate_idtp_user_request.dart';
 import 'package:idtp/src/ui/registration/bloc/registration_bloc.dart';
 import 'package:idtp/src/ui/registration/bloc/registration_event.dart';
 import 'package:idtp/src/ui/registration/bloc/registration_state.dart';
-import 'package:idtp/src/utils/toast.dart';
+import 'package:idtp/src/ui/widget/my_alert_dialog.dart';
 import 'package:idtp/src/utils/validator.dart';
+import 'package:validators/validators.dart';
 
-class RegistrationBuilderScreen extends StatelessWidget {
+class RegistrationBuilderScreen extends StatefulWidget {
+  @override
+  _RegistrationBuilderScreenState createState() =>
+      _RegistrationBuilderScreenState();
+}
+
+class _RegistrationBuilderScreenState extends State<RegistrationBuilderScreen> {
   final formKey = GlobalKey<FormState>();
+  FocusNode _focusNode = new FocusNode();
 
   TextEditingController requestedVIDController = TextEditingController();
   TextEditingController idtpPinController = TextEditingController();
@@ -19,9 +27,38 @@ class RegistrationBuilderScreen extends StatelessWidget {
   String requestedVID;
   String idtpPin;
   String confirmIdtpPin;
+  bool isValidUser = true;
 
   @override
   Widget build(BuildContext context) {
+    _focusNode.addListener(() {
+      if (!_focusNode.hasFocus) {
+        final FormState form = formKey.currentState;
+        if (form.validate()) {
+          print('Form is valid');
+        } else {
+          print('Form is invalid');
+        }
+
+        if (requestedVIDController.text.isNotEmpty) {
+          ///=== Validation data setting === ///
+          ValidateIdtpUserRequest validateIdtpUserRequest =
+              new ValidateIdtpUserRequest();
+
+          validateIdtpUserRequest.channelId = "Mobile";
+          validateIdtpUserRequest.userVid = requestedVIDController.text;
+          validateIdtpUserRequest.deviceInf = DeviceInf1();
+          List<CredDatum> credData = [];
+
+          validateIdtpUserRequest.credData = credData;
+
+          ///=== Validation api call === ///
+          BlocProvider.of<RegistrationBloc>(context).add(UserValidationEvent(
+              validateIdtpUserRequest: validateIdtpUserRequest));
+        }
+      }
+    });
+
     return BlocListener<RegistrationBloc, RegistrationState>(
         listener: (context, state) {
           if (state is UserRegistrationState) {
@@ -33,7 +70,7 @@ class RegistrationBuilderScreen extends StatelessWidget {
                   UserRegistrationEvent(
                       registrationRequest: registrationRequest));
             } else {
-              showToast("Registration data missing");
+              myAlertDialog(context, "Info", "Registration data missing");
             }
           }
         },
@@ -49,30 +86,52 @@ class RegistrationBuilderScreen extends StatelessWidget {
             )));
   }
 
-  // ignore: non_constant_identifier_names
+  String validateVID(String value) {
+    if (value.isEmpty) {
+      return "Virtual ID can't be empty";
+    } else if (!isEmail(value)) {
+      return "Please enter valid Virtual ID";
+    } else if (!isValidUser) {
+      return "User Already Exists";
+    } else
+      return null;
+  }
+
   Widget sign_up_widget(BuildContext context) {
     return Expanded(
         child: Column(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        TextFormField(
-          controller: requestedVIDController,
-          keyboardType: TextInputType.emailAddress,
-          textInputAction: TextInputAction.next,
-          validator: (value) => validateVID(value),
-          onChanged: (value) => {requestedVID = value},
-          onSaved: (String value) {
-            requestedVID = value;
-          },
-          decoration: InputDecoration(
-              border: OutlineInputBorder(),
-              prefixIcon: Icon(Icons.email),
-              suffixText: 'example@user.idtp',
-              labelText: 'Requested Virtual ID',
-              floatingLabelBehavior: FloatingLabelBehavior.auto,
-              contentPadding: EdgeInsets.fromLTRB(12, 0, 12, 0)),
-        ),
+        BlocBuilder<RegistrationBloc, RegistrationState>(
+            builder: (context, state) {
+          if (state is UserRegistrationSuccessState) {
+            if (state.isValidUser != null) {
+              this.isValidUser = state.isValidUser;
+            } else {
+              this.isValidUser = true;
+            }
+          }
+
+          return TextFormField(
+            controller: requestedVIDController,
+            keyboardType: TextInputType.emailAddress,
+            textInputAction: TextInputAction.next,
+            validator: (value) => validateVID(value),
+            onChanged: (value) => {requestedVID = value},
+            focusNode: _focusNode,
+            onSaved: (String value) {
+              requestedVID = value;
+            },
+            decoration: InputDecoration(
+                border: OutlineInputBorder(),
+                prefixIcon: Icon(Icons.email),
+                suffixText: 'example@user.idtp',
+                labelText: 'Requested Virtual ID',
+                floatingLabelBehavior: FloatingLabelBehavior.auto,
+                contentPadding: EdgeInsets.fromLTRB(12, 0, 12, 0)),
+          );
+        }),
         SizedBox(
           height: 16,
         ),
@@ -122,27 +181,10 @@ class RegistrationBuilderScreen extends StatelessWidget {
             child: new MaterialButton(
               onPressed: () {
                 if (formKey.currentState.validate()) {
-                  print("Requested VID: " + requestedVIDController.text);
-                  print("IDTP Pin: " + idtpPinController.text);
-
-                  ///=== Validation data setting === ///
-                  ValidateIdtpUserRequest validateIdtpUserRequest =
-                      new ValidateIdtpUserRequest();
-
-                  validateIdtpUserRequest.channelId = "Mobile";
-                  validateIdtpUserRequest.userVid = requestedVIDController.text;
-                  validateIdtpUserRequest.deviceInf =
-                      DeviceInf1(mobileNo: "01841752600");
-
-                  List<CredDatum> credData = [
-                    CredDatum(data: idtpPinController.text, type: "IDTP_PIN")
-                  ];
-
-                  validateIdtpUserRequest.credData = credData;
-
                   ///=== Registration data setting === ///
                   List<CredData> credData2 = [
-                    CredData(data: idtpPinController.text, type: "IDTP_PIN")
+                    CredData(data: idtpPinController.text, type: "IDTP_PIN"),
+                    CredData(data: "Test123@", type: "APP_PASS")
                   ];
 
                   registrationRequest.channelID = "Mobile";
@@ -150,21 +192,17 @@ class RegistrationBuilderScreen extends StatelessWidget {
                   List<UserReqs> userReqs = [
                     UserReqs(
                         credData: credData2,
-                        accountNumber: "0021130141392",
+                        accountNumber: "0031020007984",
+                        //Todo need to make it dynamic
+                        callFrom: "FIApp",
+                        infoEmail: "safihoacc@gmail.com",
+                        //Todo need to make it dynamic
                         requestedVirtualID: requestedVIDController.text,
-                        password: "12345678",
-                        deviceInf: DeviceInf(mobileNo: "01841752600"))
+                        password: "Alar@321",
+                        deviceInf: DeviceInf(mobileNo: "01711821618"))
+                    //Todo need to make it dynamic
                   ];
                   registrationRequest.userReqs = userReqs;
-
-                  ///=== Validation api call === ///
-                  BlocProvider.of<RegistrationBloc>(context).add(
-                      UserValidationEvent(
-                          validateIdtpUserRequest: validateIdtpUserRequest));
-
-                  // showToast("Validation Completed.");
-                } else {
-                  // showToast("Validation Incomplete!");
                 }
               },
               color: Colors.green,
