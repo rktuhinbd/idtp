@@ -25,6 +25,11 @@ class _TransactionHistoryScreenBuilderState
 
   List<Transaction> transactions = [];
 
+  var currentDate = new DateTime.now();
+
+  String fromDate;
+  String toDate;
+
   @override
   void initState() {
     // TODO: implement initState
@@ -38,11 +43,19 @@ class _TransactionHistoryScreenBuilderState
       CredDatum(data: "123456", type: "IDTP_PIN"),
     ];
 
+    toDate = currentDate.toString().substring(0,10);
+
     transactionsByUserRequest.channel = "Mobile";
     transactionsByUserRequest.deviceInf = DeviceInf();
     transactionsByUserRequest.credData = credData;
-    transactionsByUserRequest.fromDate = "2021-07-01";
-    transactionsByUserRequest.toDate = "2021-07-14";
+
+    if(fromDate != null) {
+      transactionsByUserRequest.fromDate = fromDate;
+    } else {
+      transactionsByUserRequest.fromDate = "2021-07-01";
+    }
+
+    transactionsByUserRequest.toDate = toDate;
     transactionsByUserRequest.pageNo = "1";
     transactionsByUserRequest.pageSize = "20";
     transactionsByUserRequest.userVid = "aib30008@user.idtp";
@@ -77,68 +90,134 @@ class _TransactionHistoryScreenBuilderState
 
       return Container(
         color: Colors.grey,
-        child: ListView.builder(
-            itemCount: transactions.length,
-            shrinkWrap: true,
-            itemBuilder: (context, index) {
-              return Card(
-                color: Colors.white,
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(12, 6, 12, 6),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                              transactions[index].senderVid == null
-                                  ? ""
-                                  : transactions[index].senderVid.toString(),
-                              style: TextStyle(fontSize: 16)),
-                          Text(
-                              transactions[index].date == null
-                                  ? ""
-                                  : transactions[index]
-                                      .date
-                                      .toString()
-                                      .split(" ")[0],
-                              style: TextStyle(fontSize: 16)),
-                        ],
+        child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    MaterialButton(
+                      onPressed: () async {
+                        var date = await showDatePicker(
+                            context: context,
+                            initialDate: DateTime.now(),
+                            firstDate: DateTime(2021),
+                            lastDate: DateTime(2100));
+                        if(date != null){
+                          fromDate = date.toString().substring(0,10);
+                          getTransactionHistory();
+                        }
+                      },
+                      textColor: Colors.green,
+                      child: Text(
+                        'From Date',
+                        style: TextStyle(color: Colors.white, fontSize: 16),
                       ),
-                      SizedBox(
-                        height: 6,
+                    ),
+                    SizedBox(
+                      width: 12,
+                    ),
+                    Container(
+                      child: MaterialButton(
+                        onPressed: () async {
+                          var date = await showDatePicker(
+                              context: context,
+                              initialDate: DateTime.now(),
+                              firstDate: DateTime(2021),
+                              lastDate: DateTime(2100));
+                          if(date != null){
+                            toDate = date.toString().substring(0,10);
+                            getTransactionHistory();
+                          }
+                        },
+                        textColor: Colors.green,
+                        child: Text(
+                          'To Date',
+                          style: TextStyle(color: Colors.white, fontSize: 16),
+                        ),
                       ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Expanded(
-                            flex: 1,
-                            child: Text(
-                                transactions[index].txnId == null
-                                    ? ""
-                                    : transactions[index].txnId.toString(),
-                                style: TextStyle(fontSize: 16),
-                                overflow: TextOverflow.ellipsis),
-                          ),
-                          Expanded(
-                            flex: 1,
-                            child: Text(
-                                transactions[index].amount == null
-                                    ? ""
-                                    : "৳" +
-                                        transactions[index].amount.toString(),
-                                style: TextStyle(
-                                    color: Colors.green, fontSize: 18),
-                                textAlign: TextAlign.end),
-                          ),
-                        ],
-                      )
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
-              );
-            }),
+                Expanded(
+                  child: ListView.builder(
+                      itemCount: transactions.length,
+                      shrinkWrap: true,
+                      itemBuilder: (context, index) {
+                        return Card(
+                          color: Colors.white,
+                          child: Padding(
+                            padding: const EdgeInsets.fromLTRB(12, 6, 12, 6),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              children: [
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                        transactions[index].senderVid == null
+                                            ? ""
+                                            : transactions[index]
+                                                .senderVid
+                                                .toString(),
+                                        style: TextStyle(fontSize: 16)),
+                                    Text(
+                                        transactions[index].date == null
+                                            ? ""
+                                            : transactions[index]
+                                                .date
+                                                .toString()
+                                                .split(" ")[0],
+                                        style: TextStyle(fontSize: 16)),
+                                  ],
+                                ),
+                                SizedBox(
+                                  height: 6,
+                                ),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Expanded(
+                                      flex: 1,
+                                      child: Text(
+                                          transactions[index].txnId == null
+                                              ? ""
+                                              : transactions[index]
+                                                  .txnId
+                                                  .toString(),
+                                          style: TextStyle(fontSize: 16),
+                                          overflow: TextOverflow.ellipsis),
+                                    ),
+                                    Expanded(
+                                      flex: 1,
+                                      child: Text(
+                                          transactions[index].amount == null
+                                              ? ""
+                                              : "৳" +
+                                                  transactions[index]
+                                                      .amount
+                                                      .toString(),
+                                          style: TextStyle(
+                                              color: Colors.green,
+                                              fontSize: 18),
+                                          textAlign: TextAlign.end),
+                                    ),
+                                  ],
+                                )
+                              ],
+                            ),
+                          ),
+                        );
+                      }),
+                )
+              ],
+            )),
       );
     }));
   }
